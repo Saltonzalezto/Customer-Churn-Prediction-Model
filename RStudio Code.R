@@ -1,7 +1,10 @@
 #SVM
 # Importing the dataset
-dataset = read.csv('Churn_Modelling.csv')
+###dataset = read.csv('Churn_Modelling.csv')
+dataset <- read.csv("C:/Users/salgo/Customer-Churn-Prediction-Model/dataset.csv")
+View(dataset)
 dataset = dataset[4:14]
+View(dataset)
 
 # Encoding the categorical variables as factors
 dataset$Geography = as.numeric(factor(dataset$Geography,
@@ -16,21 +19,33 @@ dataset$Gender = as.numeric(factor(dataset$Gender,
 library(caTools)
 set.seed(123)
 split = sample.split(dataset$Exited, SplitRatio = 0.8)
+
+?sample.split
+View(split)
+summary(split)
+
 training_set = subset(dataset, split == TRUE)
 test_set = subset(dataset, split == FALSE)
 
 # Feature Scaling
+
+#######  no se que es la función scale??  #####
 training_set[-11] = scale(training_set[-11])
 test_set[-11] = scale(test_set[-11])
 
 # Applying PCA
 # install.packages('caret')
 library(caret)
+
 # install.packages('e1071')
 library(e1071)
+
+
 pca = preProcess(x = training_set[-11], method = 'pca', pcaComp = 10)
 training_set = predict(pca, training_set)
 
+###faltaba##
+pca_test = preProcess(x = test_set[-11], method = 'pca', pcaComp = 10)
 test_set = predict(pca, test_set)
 
 
@@ -62,10 +77,11 @@ cv = lapply(folds, function(x) {
   return(accuracy_svm)
 })
 accuracy_svm = mean(as.numeric(cv))
-
+accuracy_svm
 # ANN
 # Importing the dataset
-dataset = read.csv('Churn_Modelling.csv')
+dataset <- read.csv("C:/Users/salgo/Customer-Churn-Prediction-Model/dataset.csv")
+##dataset = read.csv('Churn_Modelling.csv')
 dataset = dataset[4:14]
 
 # Encoding the categorical variables as factors
@@ -140,7 +156,8 @@ accuracy_ann = mean(as.numeric(cv))
 
 # XGBoost
 # Importing the dataset
-dataset = read.csv('Churn_Modelling.csv')
+dataset <- read.csv("C:/Users/salgo/Customer-Churn-Prediction-Model/dataset.csv")
+###dataset = read.csv('Churn_Modelling.csv')
 dataset = dataset[4:14]
 
 # Encoding the categorical variables as factors
@@ -185,3 +202,5 @@ cv = lapply(folds, function(x) {
   return(accuracy_xgb)
 })
 accuracy_xgb = mean(as.numeric(cv))
+accuracy_xgb
+
